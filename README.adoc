@@ -1,0 +1,121 @@
+= OpenNSM PJSM Vagrant
+This repository can boot and initialize a Vagrant environment.
+This repository gives the possibility to use the same base image and configure OpenNMS for each environment differently controlled through the 'Vagrantfile'
+
+== Dependencies
+
+The repository link:https://github.com/opennms-forge/pjsm-opennms-chef.git¢[pjsm-opennms-chef] is included as 'git submodule' to avoid a fork of the Chef cookbook.
+
+IMPORTANT: If you want to make changes in the OpenNMS cookbook, please commit to link:https://github.com/opennms-forge/pjsm-opennms-chef.git¢[pjsm-opennms-chef] and run `git submodule update --init --recursive --remote`
+in the 'pjsm-opennms-vagrant' repository to get the cookbook updated.
+
+== Requirements and environments
+The cookbook is build based on the following requirements:
+
+ * Internet access to download and run a provided CentOS 6.5 base image
+ * link:http://www.vagrantup.com/downloads.html[Vagrant 1.6.3+]
+ * link:https://www.virtualbox.org/wiki/Downloads[VirtualBox 4.3.14]
+
+WARNING: The setup is build just for _CentOS 6.5_ and is not tested on other platforms.
+
+== Usage
+
+- Download or clone the repository from GitHub, there is a ZIP and tar.gz file also available in 'releases'.
+----
+git clone https://github.com/opennms-forge/pjsm-opennms-vagrant.git
+----
+
+- Change into the 'pjsm-opennms-vagrant' directory
+----
+cd pjsm-opennms-vagrant
+----
+
+- Customize the Vagrantfile with environment specific settings
+
+.Default configuration for OpenNMS and event forwarding
+----
+chef.json = {
+  :opennms => {
+    :release => "branches/pjsm-2.0",
+    :home => "/opt/opennms",
+    :discovery => {
+      :foreignsource => "UK-Store-1",
+      :range => {
+        :start => "10.23.42.1",
+        :end => "10.23.42.254"
+      },
+      :threads => "5"
+    },
+    :activemq => {
+      :eventforwarder => {
+        :location => "Birmingham"
+      }
+    }
+  },
+  :activemq => {
+    :server => {
+      :dispatcher => {
+        :broker_name => "my-uk-store-dispatcher-01",
+        :brokerUri => "tcp://127.0.0.1:61616"
+      }
+    }
+  },
+  :java => {
+    :install_flavor => "oracle",
+    :jdk_version => "7",
+    :oracle_rpm => {
+      :type => "jdk"
+    },
+    :oracle => {
+      :accept_oracle_download_terms => "true"
+    }
+  }
+}
+----
+
+- Startup the Vagrant box with
+----
+vagrant up
+----
+
+== Environments and setups
+There are two different install environments available:
+
+ - Option 1: Install everything on the Vagrant box
+ - Option 2: Use a pre-packaged base box and just change configuration
+
+=== Option 1
+ - Use a small and plain CentOS 6.5 base image
+ - The Chef cookbook will install everything from scratch
+ - Installes latest version of Java, OpenNMS from YUM repository
+
+.Build OpenNMS from scratch in Vagrant
+----
+config.vm.box = "opscode_centos-6.5"
+config.vm.box_url = "http://mirror.opennms.eu/pub/vagrant/stable/opscode_centos-6.5_chef-provisionerless.box"
+----
+
+=== Option 2
+ - OpenNMS is pre-installed
+ - It ensures every base box has exactly the same OpenNMS version
+
+.Use OpenNMS pre-installed base box
+----
+config.vm.box = "opennms-pjsm-centos-6.5"
+config.vm.box_url = "http://mirror.opennms.eu/pub/vagrant/opennms-pjsm/pjsm-opennms-centos-6.5-development.box"
+----
+
+== Contributing
+
+1. Fork the repository on Github
+2. Create a named feature branch (i.e. `add-new-recipe`)
+3. Write your change
+4. Write tests for your change (if applicable)
+5. Run the tests, ensuring they all pass
+6. Submit a Pull Request
+
+== License and Authors
+
+Author:: Ronny Trommer <ronny@opennms.org>
+Copyright (c) 2014 The OpenNMS Group, Inc.
+License:: GPLv3+

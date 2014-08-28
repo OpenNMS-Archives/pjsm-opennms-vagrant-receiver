@@ -1,0 +1,1 @@
+{"virtualbox":{"/vagrant":{"guestpath":"/vagrant","hostpath":"/Users/thedesloge/git/opennms/vagrant/pjsm-opennms-vagrant-receiver","disabled":false},"v-csc-1":{"id":"v-csc-1","guestpath":"/tmp/vagrant-chef-3/chef-solo-1/cookbooks","hostpath":"/Users/thedesloge/git/opennms/vagrant/pjsm-opennms-vagrant-receiver/cookbooks","disabled":false}}}
