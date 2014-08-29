@@ -30,13 +30,6 @@ git clone https://github.com/opennms-forge/pjsm-opennms-vagrant.git
 cd pjsm-opennms-vagrant
 ----
 
-- Get the submodules
----
-git submodule init
-git submodule sync
-git submodule update --init --recursive —remote
----
-
 - Customize the Vagrantfile with environment specific settings
 
 .Default configuration for OpenNMS and event forwarding
