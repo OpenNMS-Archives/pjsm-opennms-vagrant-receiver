@@ -30,6 +30,12 @@ git clone https://github.com/opennms-forge/pjsm-opennms-vagrant.git
 cd pjsm-opennms-vagrant
 ----
 
+-If you clone the repository, the cookbooks/opennms-light directory is empty. It is a git submodule and has to be initialized with
+----
+git submodule init
+git submodule sync
+git submodule update --init --recursive —remote
+----
 - Customize the Vagrantfile with environment specific settings
 
 .Default configuration for OpenNMS and event forwarding
